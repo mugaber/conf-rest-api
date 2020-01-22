@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-
-// to construct a nested schema
+require("mongoose-currency").loadType(mongoose);
+const Currency = mongoose.Types.Currency;
 
 const commentSchema = new Schema(
   {
@@ -25,9 +25,6 @@ const commentSchema = new Schema(
   }
 );
 
-// we are going to make use of this schema for the dishes
-// to have a comments that follow commentSchema
-
 const dishSchema = new Schema(
   {
     name: {
@@ -39,7 +36,28 @@ const dishSchema = new Schema(
       type: String,
       required: true
     },
-    comments: [ commentSchema ]
+    comments: [commentSchema],
+    image: {
+      type: String,
+      required: true
+    },
+    category: {
+      type: String,
+      required: true
+    },
+    label: {
+      type: String,
+      default: ""
+    },
+    price: {
+      type: Currency,
+      required: true,
+      min: 0
+    },
+    featured: {
+      type: Boolean,
+      default: false
+    }
   },
   {
     timestamps: true
