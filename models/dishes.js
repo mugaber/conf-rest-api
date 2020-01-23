@@ -5,7 +5,7 @@ const Currency = mongoose.Types.Currency;
 
 const commentSchema = new Schema(
   {
-    rate: {
+    rating: {
       type: Number,
       min: 1,
       max: 5,
