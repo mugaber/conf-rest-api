@@ -51,7 +51,7 @@ dishRouter
       .then(
         resp => {
           console.log("Deleted all the dishes");
-          res.statusCode = 200;
+          rets.stausCode = 200;
           res.setHeader("Content-Type", "application/json");
           res.json(resp);
         },
@@ -242,7 +242,6 @@ dishRouter
             if (rating) {
               dish.comments.id(commentId).rating = rating;
             }
-
             const comment = req.body.comment;
             if (comment) {
               dish.comments.id(commentId).comment = comment;
