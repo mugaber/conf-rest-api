@@ -2,7 +2,6 @@
 var createError = require("http-errors");
 var express = require("express");
 var path = require("path");
-var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 
 var passport = require("passport");
@@ -44,18 +43,6 @@ app.set("view engine", "jade");
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-// app.use(cookieParser("12345-67890-09876-54321"));
-
-// now are using tokens jwt
-// app.use(
-//   session({
-//     name: "session-id",
-//     secret: "12345-67890-09876-54321",
-//     saveUninitialized: false,
-//     resave: false,
-//     store: new FileStore()
-//   })
-// );
 
 // for user authetication using passport
 app.use(passport.initialize());
@@ -65,18 +52,6 @@ app.use("/", indexRouter);
 app.use("/users", usersRouter);
 
 // passport now is using jwt Strategy
-
-// function auth(req, res, next) {
-//   if (!req.user) {
-//     var err = new Error("You are not authenticated!");
-//     err.status = 403;
-//     return next(err);
-//   } else {
-//     next();
-//   }
-// }
-
-// app.use(auth);
 
 app.use(express.static(path.join(__dirname, "public")));
 

@@ -15,9 +15,11 @@ const commentSchema = new Schema(
       type: String,
       required: true
     },
+    // the author now will be populated by mongoose 
+    // using the reference provided
     author: {
-      type: String,
-      required: true
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User"
     }
   },
   {
