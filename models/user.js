@@ -9,9 +9,6 @@ var User = new Schema({
   }
 });
 
-// now the Use Schema will use the functionality provided
-// from this plugin which includes username and password
-
 User.plugin(passportLocalMongoose);
 
 module.exports = mongoose.model("User", User);
