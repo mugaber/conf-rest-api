@@ -1,8 +1,8 @@
 // the requires
 var createError = require("http-errors");
 var express = require("express");
-var path = require("path");
 var logger = require("morgan");
+var path = require("path");
 
 var passport = require("passport");
 var authenticate = require("./authenticate");
@@ -13,11 +13,12 @@ var session = require("express-session");
 var FileStore = require("session-file-store")(session);
 
 // the routes
-var indexRouter = require("./routes/index");
-var usersRouter = require("./routes/users");
+const indexRouter = require("./routes/index");
+const usersRouter = require("./routes/users");
 const dishRouter = require("./routes/dishRouter");
-const leaderRouter = require("./routes/leaderRouter");
 const promoRouter = require("./routes/promoRouter");
+const leaderRouter = require("./routes/leaderRouter");
+const uploadRouter = require("./routes/uploadRouter");
 
 // connection to the database
 const mongoose = require("mongoose");
@@ -33,7 +34,7 @@ connect.then(
   }
 );
 
-// express inistance
+// express instance
 var app = express();
 
 // middleware for handling unsecure requests
@@ -70,6 +71,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/dishes", dishRouter);
 app.use("/leaders", leaderRouter);
 app.use("/promotions", promoRouter);
+app.use("/imageUpload", uploadRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
