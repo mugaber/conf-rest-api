@@ -1,8 +1,9 @@
-var express = require("express");
 var router = express.Router();
-const bodyParser = require("body-parser");
-var User = require("../models/user");
+const cors = require("./cors");
+var express = require("express");
 var passport = require("passport");
+var User = require("../models/user");
+const bodyParser = require("body-parser");
 
 var authenticate = require("../authenticate");
 
@@ -11,6 +12,7 @@ router.use(bodyParser.json());
 // GET users listing
 router.get(
   "/",
+  cors.cors,
   authenticate.verifyUser,
   authenticate.verifyAdmin,
   (req, res, next) => {
@@ -27,7 +29,7 @@ router.get(
   }
 );
 
-router.post("/signup", (req, res, next) => {
+router.post("/signup", cors.corsWithOptions, (req, res, next) => {
   User.register(
     new User({ username: req.body.username }),
     req.body.password,
@@ -61,13 +63,18 @@ router.post("/signup", (req, res, next) => {
   );
 });
 
-router.post("/login", passport.authenticate("local"), (req, res) => {
-  var token = authenticate.getToken({ _id: req.user._id });
+router.post(
+  "/login",
+  cors.corsWithOptions,
+  passport.authenticate("local"),
+  (req, res) => {
+    var token = authenticate.getToken({ _id: req.user._id });
 
-  res.statusCode = 200;
-  res.setHeader("Content-Type", "application/json");
-  res.json({ success: true, token: token, status: "Successful Login!" });
-});
+    res.statusCode = 200;
+    res.setHeader("Content-Type", "application/json");
+    res.json({ success: true, token: token, status: "Successful Login!" });
+  }
+);
 
 router.get("/logout", (req, res) => {
   if (req.session) {
@@ -82,5 +89,3 @@ router.get("/logout", (req, res) => {
 });
 
 module.exports = router;
-
-// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTJiZGE3NDI2NDI0NTIyMzUyNTJlMTMiLCJpYXQiOjE1Nzk5MzQ4MjEsImV4cCI6MTU3OTkzODQyMX0.ortJyz031QX5ibN80pOaAEPTf8v0lHI3qFGWUGDcfGA
