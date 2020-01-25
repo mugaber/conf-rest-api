@@ -41,9 +41,22 @@ exports.jwtPassport = passport.use(
 
 exports.verifyUser = passport.authenticate("jwt", { session: false });
 
-/*
-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTJiMWE3YTNmMzUyYTU1MWE2ZDZiYTQiLCJpYXQiOjE1Nzk4ODMxNTEsImV4cCI6MTU3OTg4Njc1MX0.zAYeX3aWXWvnDPIYhcuPSWjuccBmPo-t7YxeXaFV5F4 
+// a function to be used in the API endpoints to verify
+// if a user have the admin flag turned true
 
-5e2b1bf03f352a551a6d6ba5
-
-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTJiMWE3YTNmMzUyYTU1MWE2ZDZiYTQiLCJpYXQiOjE1Nzk4ODMzMjEsImV4cCI6MTU3OTg4NjkyMX0.SqwkQbj1tltQJHNj3GdW5iFSL0fRJpDgiYzDlgORThc*/
+exports.verifyAdmin = (req, res, next) => {
+  User.findById(req.user._id)
+    .then(
+      user => {
+        if (user.admin) {
+          next();
+        } else {
+          err = new Error("You are not authorized to perform this operation!");
+          err.status = 403;
+          return next(err);
+        }
+      },
+      err => next(err)
+    )
+    .catch(err => next(err));
+};

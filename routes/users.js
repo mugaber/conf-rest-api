@@ -9,12 +9,23 @@ var authenticate = require("../authenticate");
 router.use(bodyParser.json());
 
 // GET users listing
-router.get("/", (req, res, next) => {
-  res.send("respond wit a resource");
-});
-
-// to make use of passport and User new functionality
-// for local authentication
+router.get(
+  "/",
+  authenticate.verifyUser,
+  authenticate.verifyAdmin,
+  (req, res, next) => {
+    User.find({})
+      .then(
+        users => {
+          res.statusCode = 200;
+          res.setHeader("Content-Type", "application/json");
+          res.json(users);
+        },
+        err => next(err)
+      )
+      .catch(err => next(err));
+  }
+);
 
 router.post("/signup", (req, res, next) => {
   User.register(
@@ -26,7 +37,6 @@ router.post("/signup", (req, res, next) => {
         res.setHeader("Content-Type", "application/json");
         res.json({ err: err });
       } else {
-        // to make use of the new fields first and lastname
         if (req.body.firstname) {
           user.firstname = req.body.firstname;
         }
@@ -51,10 +61,7 @@ router.post("/signup", (req, res, next) => {
   );
 });
 
-// making use of the new authentication Strategy jwt
-
 router.post("/login", passport.authenticate("local"), (req, res) => {
-  // generate the token by using the user id
   var token = authenticate.getToken({ _id: req.user._id });
 
   res.statusCode = 200;
@@ -75,3 +82,5 @@ router.get("/logout", (req, res) => {
 });
 
 module.exports = router;
+
+// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTJiZGE3NDI2NDI0NTIyMzUyNTJlMTMiLCJpYXQiOjE1Nzk5MzQ4MjEsImV4cCI6MTU3OTkzODQyMX0.ortJyz031QX5ibN80pOaAEPTf8v0lHI3qFGWUGDcfGA
