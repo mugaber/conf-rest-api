@@ -4,13 +4,12 @@ var express = require("express");
 var logger = require("morgan");
 var path = require("path");
 
-var passport = require("passport");
 var authenticate = require("./authenticate");
+var passport = require("passport");
 
-var config = require("./config");
-
-var session = require("express-session");
 var FileStore = require("session-file-store")(session);
+var session = require("express-session");
+var config = require("./config");
 
 // the routes
 const indexRouter = require("./routes/index");
@@ -19,6 +18,7 @@ const dishRouter = require("./routes/dishRouter");
 const promoRouter = require("./routes/promoRouter");
 const leaderRouter = require("./routes/leaderRouter");
 const uploadRouter = require("./routes/uploadRouter");
+const favoriteRouter = require("./routes/favoriteRouter");
 
 // connection to the database
 const mongoose = require("mongoose");
@@ -72,6 +72,7 @@ app.use("/dishes", dishRouter);
 app.use("/leaders", leaderRouter);
 app.use("/promotions", promoRouter);
 app.use("/imageUpload", uploadRouter);
+app.use("/favorites", favoriteRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
